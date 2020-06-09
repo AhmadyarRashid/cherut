@@ -9,20 +9,22 @@ import ProductPage from "./pages/products/products.page";
 import EditorPage from './pages/editor/editor.page';
 import ProgressBarComponent from "./components/ui/progress-bar/progressBar.component";
 import {S3Upload} from "./components/s3-upload-images/upload"
+import Test from './pages/editor/test';
 
 function App() {
-    
+
     return (
         <React.Fragment>
 
             <ProgressBarComponent/>
-            <S3Upload/> 
+            <S3Upload/>
             <Switch>
                 <Route exact path='/' component={ProjectsPage}/>
                 <Route exact path='/products' component={ProductPage}/>
                 <Route exact path='/home' component={HomePage}/>
                 <Route exact path='/login' component={LoginPage}/>
                 <Route exact path='/editor' component={EditorPage}/>
+                <Route exact path='/test' component={Test}/>
             </Switch>
         </React.Fragment>
 

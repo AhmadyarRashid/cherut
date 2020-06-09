@@ -38,7 +38,9 @@ const useStyles = makeStyles((theme) => ({
     cardImage: {
         position: 'relative',
         right: 0,
-        top: 0
+        top: 0,
+        overflowX: 'hidden',
+        overflowY: 'hidder'
     }
 }));
 
@@ -47,9 +49,11 @@ function Editor(props) {
 
     const [edit, setEdit] = React.useState(false);
     const [text, setText] = React.useState('');
+    const [images, setImages] = React.useState([]);
+    const [position, setPosition] = React.useState(1);
 
     const handlerKeyCode = e => {
-        if (e.keyCode == 32) {
+        if (e.keyCode == 13) {
             setEdit(false)
         }
     }
@@ -57,6 +61,37 @@ function Editor(props) {
     const handlerInput = e => {
         setText(e.target.value);
     };
+
+    const loadFile = event => {
+        // var output = document.getElementById('output');
+        // output.src = URL.createObjectURL(event.target.files[0]);
+        // console.log('--- onChange input -----', output, output.src)
+        setImages(images.concat(URL.createObjectURL(event.target.files[0])))
+    }
+
+    const handlerCardImg = (evemt, item) => {
+        if (position == 1) {
+            var output = document.getElementById('img1');
+            output.src = item;
+            setPosition(Number(position) + 1)
+        } else if (position == 2) {
+            var output = document.getElementById('img2');
+            output.src = item;
+            setPosition(Number(position) + 1)
+        } else if (position == 3) {
+            var output = document.getElementById('img3');
+            output.src = item;
+            setPosition(1)
+        }else {
+            // do nothing
+        }
+    }
+
+    const displayGridPic = () => {
+        return images.map(item => <GridListTile onClick={e => handlerCardImg(e, item)} cols={2} style={{padding: 12}}>
+            <img src={item} style={{width: 100, height: 100}} alt={'image'}/>
+        </GridListTile>)
+    }
 
     return (
         <div className={classes.root}>
@@ -77,30 +112,29 @@ function Editor(props) {
                     <Paper className={classes.paper}>
                         <div>
                             <div>
-                                <Button
+                                <input
+                                    type="file"
                                     style={{
                                         width: '100%',
                                         padding: 12,
                                         backgroundColor: '#00bfff',
                                         color: 'white'
-                                    }}>
-                                    + AdICIONAR FOTOS</Button></div>
+                                    }}
+                                    accept="image/*"
+                                    onChange={event => loadFile(event)}/>
+                                {/*<Button*/}
+                                    {/*type="file"*/}
+                                    {/*style={{*/}
+                                        {/*width: '100%',*/}
+                                        {/*padding: 12,*/}
+                                        {/*backgroundColor: '#00bfff',*/}
+                                        {/*color: 'white'*/}
+                                    {/*}}>*/}
+                                    {/*+ AdICIONAR FOTOS</Button>*/}
+                            </div>
                             <div style={{marginTop: 18}}>
                                 <GridList cellHeight={160} className={classes.gridList} cols={4}>
-                                    <GridListTile key={'123'} cols={2} style={{padding: 12}}>
-                                        <img src={require('../../assets/image/1.PNG')} style={{width: 100, height: 100}}
-                                             alt={'image'}/>
-                                    </GridListTile>
-                                    <GridListTile key={'123'} cols={2} style={{padding: 12}}>
-                                        <img src={require('../../assets/image/2.PNG')}
-                                             style={{width: 100, height: 100}}
-                                             alt={'image'}/>
-                                    </GridListTile>
-                                    <GridListTile key={'123'} cols={2} style={{padding: 12}}>
-                                        <img src={require('../../assets/image/3.PNG')}
-                                             style={{width: 100, height: 100}}
-                                             alt={'image'}/>
-                                    </GridListTile>
+                                    {displayGridPic()}
                                 </GridList>
                             </div>
                         </div>
@@ -111,27 +145,31 @@ function Editor(props) {
                         <Grid container spacing={3} style={{height: '70%'}}>
                             <Grid item md={6}>
                                 <Paper style={{height: '50%'}} className={classes.paper}>
-                                    <img className={classes.cardImage} src={require('../../assets/image/1.PNG')}/>
+                                    <img id="img1" className={classes.cardImage}/>
                                 </Paper>
                                 <Paper style={{marginTop: 8, height: '50%'}} className={classes.paper}>
-                                    <img className={classes.cardImage} src={require('../../assets/image/3.PNG')}/>
+                                    <img id="img2" className={classes.cardImage}/>
                                 </Paper>
                             </Grid>
                             <Grid item md={6}>
                                 <Paper style={{height: '112%'}} className={classes.paper}>
-                                    <img className={classes.cardImage} src={require('../../assets/image/2.PNG')}/>
+                                    <img id="img3" className={classes.cardImage}/>
                                 </Paper>
                             </Grid>
                         </Grid>
                         <div style={{marginTop: 95, padding: 3}}>
                             {!edit ?
-                                <p ondblclick={e => setEdit(true)}
-                                   style={{textAlign: 'center', color: 'white', fontSize: 22}}>{!!text ? text: 'Write Here Text'}</p> :
+                                <p onDoubleClick={e => setEdit(true)}
+                                   style={{
+                                       textAlign: 'center',
+                                       color: 'white',
+                                       fontSize: 22
+                                   }}>{!!text ? text : 'Write Here Text'}</p> :
                                 <input onKeyUp={e => handlerKeyCode(e)} onChange={e => handlerInput(e)} value={text}
                                        style={{
                                            textAlign: 'center',
-                                           color: 'black',
-                                           backgroundColor: 'white',
+                                           color: 'white',
+                                           backgroundColor: 'transparent',
                                            fontSize: 22,
                                            width: '100%',
                                            height: 55
