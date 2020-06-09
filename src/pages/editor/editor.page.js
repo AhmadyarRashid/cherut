@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import {Button, GridList, GridListTile} from '@material-ui/core';
 import PhotoFilterIcon from '@material-ui/icons/PhotoFilter';
 import Header from './Header';
+import data from './font';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -51,6 +52,10 @@ function Editor(props) {
     const [text, setText] = React.useState('');
     const [images, setImages] = React.useState([]);
     const [position, setPosition] = React.useState(1);
+
+    React.useEffect(() => {
+
+    }, []);
 
     const handlerKeyCode = e => {
         if (e.keyCode == 13) {
@@ -163,14 +168,14 @@ function Editor(props) {
                                    style={{
                                        textAlign: 'center',
                                        color: 'white',
-                                       fontSize: 22
+                                       fontSize: data.fontSize
                                    }}>{!!text ? text : 'Write Here Text'}</p> :
                                 <input onKeyUp={e => handlerKeyCode(e)} onChange={e => handlerInput(e)} value={text}
                                        style={{
                                            textAlign: 'center',
                                            color: 'white',
                                            backgroundColor: 'transparent',
-                                           fontSize: 22,
+                                           fontSize: data.fontSize,
                                            width: '100%',
                                            height: 55
                                        }}/>}
